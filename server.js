@@ -37,6 +37,11 @@ const now = new Date();
 res.json(buildResponse(now));
 });
 
+app.get("/api/", (req, res) => {
+    const now = new Date();
+    res.json(buildResponse(now));
+  });
+  
 
 // /api/:date? — handle either a unix ms timestamp or a date string
 app.get("/api/:date", (req, res) => {
@@ -48,14 +53,17 @@ let date;
 
 // If param is all digits, treat as Unix milliseconds
 if (/^\d+$/.test(dateParam)) {
-const ms = Number(dateParam);
-date = new Date(ms);
-} else {
-// Otherwise, let the Date parser handle it (assumed GMT per challenge note)
-date = new Date(dateParam);
-}
+    // Handle both seconds (10 digits) and milliseconds (13 digits)
+    if (dateParam.length === 13) {
+      date = new Date(Number(dateParam));       
+    } else {
+      date = new Date(Number(dateParam) * 1000); 
+    }
+  } else {
+    date = new Date(dateParam);
+  }
 
-
+  
 if (isNaN(date.getTime())) {
 return res.json({ error: "Invalid Date" });
 }
