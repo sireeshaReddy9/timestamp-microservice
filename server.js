@@ -48,15 +48,12 @@ if (/^\d+$/.test(dateParam)) {
     date = new Date(dateParam);
   }
 
-  
 if (isNaN(date.getTime())) {
 return res.json({ error: "Invalid Date" });
 }
 
-
 return res.json(buildResponse(date));
 });
-
 
 app.listen(PORT, () => {
 console.log(`\nTimestamp Microservice listening on http://localhost:${PORT}`);
